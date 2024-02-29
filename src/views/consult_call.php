@@ -1,9 +1,9 @@
 <?php
-require_once "../validator_acess.php";
+require_once('C:/xampp/htdocs/chamado-real/validator_access.php');
 
 $calls = array();
 
-$arquivo = fopen('../arquivo.txt', 'r');
+$arquivo = fopen('C:\xampp\htdocs\chamado-real\arquivo.txt', 'r');
 
 while (!feof($arquivo)) {
   $registro = fgets($arquivo);
@@ -18,7 +18,7 @@ fclose($arquivo);
 
 <head>
   <meta charset="utf-8" />
-  <title>App Help Desk</title>
+  <title>Campo real</title>
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
