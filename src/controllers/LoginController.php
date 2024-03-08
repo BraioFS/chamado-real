@@ -1,32 +1,28 @@
 <?php
-// Corrigindo o caminho do arquivo User.php
-require_once __DIR__ . "/../models/User.php";
+require_once __DIR__ . "/../models/Student.php";
 
 class LoginController
 {
-    private $users;
+    private $students;
 
     public function __construct()
     {
-        $this->users = [];
-        $this->users[] = new User(1, 'Braio', 'Mernick', 'braio@gmail.com', '123456', 1, true);
-        $this->users[] = new User(2, 'Jão', 'Lazinhõn', 'Jao@gmail.com', '123456', 2, true);
-        $this->users[] = new User(3, 'Riucardo', 'tratch', 'riucardo@gmail.com', '123456', 3, true);
+        if (!isset($this->students) || empty($this->students)) {
+            $this->students[] = new Student('braio@gmail.com', '2024031', 'Moda', '1234');
+            $this->students[] = new Student('teste@gmail.com', '20240312', 'Moda', '1234');
+        }
     }
-
-    public function authenticate($email, $password)
+    public function authenticate($registration, $password)
     {
-        $email = strtolower($email);
+        $registration = strtolower($registration);
         $password = strtolower($password);
 
-        foreach ($this->users as $user) {
-            if (strcasecmp($user->email, $email) === 0 && password_verify($password, $user->password)) {
+        foreach ($this->students as $student) {
+            if (strcasecmp($student->getRegistration(), $registration) === 0 && password_verify($password, $student->getPassword())) {
                 session_start();
                 $_SESSION['authentication'] = 'YES';
-                $_SESSION['id'] = $user->id;
-                $_SESSION['name'] = $user->first_name . ' ' . $user->last_name;
-                $_SESSION['profile_id'] = $user->profile_id;
-                $_SESSION['email'] = $user->email;
+                $_SESSION['name'] = $student->getName();
+                $_SESSION['registration'] = $student->getRegistration();
 
                 header('Location: /chamado-real/src/views/home.php');
                 exit;
@@ -37,6 +33,43 @@ class LoginController
         $_SESSION['authentication'] = 'NO';
         header('Location: index.php?login=erro');
         exit;
+    }
+
+    public function getStudents()
+    {
+        return $this->students;
+    }
+
+    public function addStudent($name, $course, $registration, $password, $list)
+    {
+
+        $studentExists = false;
+
+        foreach ($list as $key => $user) {
+            if ($user->getRegistration() == $registration) {
+                [$key] = new Student($name, $registration, $course, $password);
+                $studentExists = true;
+                break;
+            }
+        }
+
+        if (!$studentExists) {
+            $newStudent = new Student($name, $registration, $course, $password);
+            $list[] = $newStudent;
+        }
+
+        return $list;
+    }
+
+    public function removeStudent($registration, $list)
+    {
+        foreach ($list as $key => $user) {
+            if ($user->getRegistration() == $registration) {
+                unset($list[$key]);
+                return true;
+            }
+        }
+        return $list;
     }
 }
 ?>

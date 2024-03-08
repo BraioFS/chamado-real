@@ -1,5 +1,12 @@
 <?php
-require_once('C:/xampp/htdocs/chamado-real/validator_access.php');
+require_once('../../validator_access.php');
+require_once('../controllers/LoginController.php');
+
+$loginController = new LoginController();
+if (!isset($list)) {
+  $list = $loginController->getStudents();
+}
+
 ?>
 
 <html>
@@ -36,29 +43,67 @@ require_once('C:/xampp/htdocs/chamado-real/validator_access.php');
   </nav>
 
   <div class="container">
-    <div class="row">
+
+    <div class="row mt-3">
       <div class="card-home">
         <div class="card">
           <div class="card-header">
-            Menu
+            Cadastro de Estudantes
           </div>
           <div class="card-body">
-            <div class="row">
-              <div class="col-6 d-flex justify-content-center">
-                <a href="open_call.php">
-                  <img src="../formulario_abrir_chamado.png" width="70" height="70" alt="Abrir Chamado">
-                </a>
+            <form method="post">
+              <div class="form-group">
+                <input name="name" type="name" class="form-control" placeholder="Nome" />
               </div>
-              <div class="col-6 d-flex justify-content-center">
-                <a href="consult_call.php">
-                  <img src="../formulario_consultar_chamado.png" width="70" height="70" alt="Consultar Chamado">
-                </a>
+              <div class="form-group">
+                <input name="course" type="course" class="form-control" placeholder="Curso" />
               </div>
-            </div>
+              <div class="form-group">
+                <input name="registration" type="registration" class="form-control" placeholder="Matricula" />
+              </div>
+              <div class="form-group">
+                <input name="password" type="password" class="form-control" placeholder="Senha" />
+              </div>
+              <?php if (isset($_GET['register']) && $_GET['register'] == 'erro') { ?>
+                <div class="text-danger">
+                  Usuário ou senha inválidos
+                </div>
+              <?php } ?>
+              <button class="btn btn-gl btn-info bt-block" type="submit">Cadastrar</button>
+            </form>
+
+            <?php
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+              if (isset($_POST['name'], $_POST['course'], $_POST['registration'], $_POST['password'])) {
+                $list = $loginController->addStudent($_POST['name'], $_POST['course'], $_POST['registration'], $_POST['password'], $list);
+              } else {
+                echo "erro de cadastro ";
+                exit;
+              }
+            }
+            ?>
           </div>
         </div>
       </div>
     </div>
+
+    <div class="row mt-3">
+      <div class="card-home">
+        <div class="card">
+          <div class="card-header">
+            Lista de Estudantes
+          </div>
+          <div class="card-body">
+            <?php
+            foreach ($list as $student) {
+              echo "<p>Nome: {$student->getName()}, Curso: {$student->getCourse()}, Matricula: {$student->getRegistration()}</p>";
+            }
+            ?>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </body>
 

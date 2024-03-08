@@ -1,6 +1,3 @@
-<?php
-?>
-
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -36,7 +33,7 @@
                     <div class="card-body">
                         <form action="validate_login.php" method="post">
                             <div class="form-group">
-                                <input name="email" type="email" class="form-control" placeholder="E-mail" />
+                                <input name="registration" type="registration" class="form-control" placeholder="registration" />
                             </div>
                             <div class="form-group">
                                 <input name="password" type="password" class="form-control" placeholder="Senha" />
